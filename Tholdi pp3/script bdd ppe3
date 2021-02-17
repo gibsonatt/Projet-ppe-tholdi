@@ -1,0 +1,44 @@
+Create Table Leconteneur (numid char(11) Not null,
+						  type char(2) Not null,
+						  emplacement char(10) Not null,
+						  numcli int(11),
+						  date_arrivee date Not null,
+						  Constraint pk_Leconteneur PRIMARY KEY (numid)
+);
+
+Create Table Quai (numquai char(2) Not NULL,
+					Constraint pk_Quai PRIMARY KEY (numquai)
+					);
+
+Create Table Allee (numallee char(3) Not NULL,
+					numquai  char(2) Not NULL,
+					Constraint pk_Allee PRIMARY KEY (numallee,numquai),
+					Constraint fk_Allee_Quai FOREIGN KEY (numquai) REFERENCES Quai (numquai)
+					);
+
+Create Table Emplacement (numemplacement char(3) Not Null,
+						  numallee char(3) Not NULL,
+						  numquai char(2) Not NULL,
+						  Constraint pk_Emplacement PRIMARY KEY (numemplacement,numallee,numquai),
+						  Constraint fk_Emplacement_Allee FOREIGN KEY (numallee,numquai) REFERENCES Allee (numallee,numquai)
+						  );
+
+
+
+
+
+Create Table Position (numposition char(9) Not Null,
+						numemplacement char(3) Not null,
+						numallee char(3) Not Null,
+					   numquai char(2) Not Null,	   
+					   numetage char(1) Not Null,
+					   numcont char(3) Not null,
+					   Constraint pk_Position PRIMARY KEY (numposition),
+					   Constraint fk_Position_Emplacement FOREIGN KEY (numemplacement,numallee,numquai) REFERENCES Emplacement (numemplacement,numallee,numquai),
+					   Constraint fk_Position_Leconteneur FOREIGN KEY (numcont) REFERENCES Leconteneur (numid)
+);
+
+Alter Table Leconteneur ADD Constraint fk_Leconteneur_Position FOREIGN KEY (emplacement) REFERENCES Position (numposition)
+;
+
+
